@@ -1,1 +1,1 @@
-# DotaHero
+# OpenDotaHero
