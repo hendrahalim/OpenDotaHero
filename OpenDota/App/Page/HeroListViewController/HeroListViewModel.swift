@@ -9,9 +9,6 @@ import Foundation
 import RxSwift
 import RxDataSources
 
-protocol HeroListViewModelOutput: AnyObject {
-    func didTapHero(id: Int)
-}
 
 class HeroListViewModel {
     struct Input {
@@ -24,6 +21,10 @@ class HeroListViewModel {
         let section: Observable<[HeroCollectionModel]>
         let role: Observable<[String]>
         let viewState: Observable<ViewState>
+    }
+    
+    struct CoordinatorOutput {
+        let didTapHero: Observable<Int?>
     }
     
     struct HeroSectionItemModel: IdentifiableType, Equatable {
@@ -74,11 +75,11 @@ class HeroListViewModel {
         let ids: Set<Int>
     }
     
-    weak var output: HeroListViewModelOutput?
-    private let disposeBag = DisposeBag()
+    let disposeBag = DisposeBag()
+    private let didTapHero = PublishSubject<Int?>()
     
-    init(output: HeroListViewModelOutput?) {
-        self.output = output
+    init() {
+        
     }
     
     func tranform(input: Input) -> Output {
@@ -153,7 +154,7 @@ class HeroListViewModel {
         
         input.didSelectModel
             .bind { [weak self] (id) in
-                self?.output?.didTapHero(id: id)
+                self?.didTapHero.onNext(id)
             }
             .disposed(by: disposeBag)
         
@@ -179,6 +180,13 @@ class HeroListViewModel {
             section: section,
             role: role,
             viewState: viewState
+        )
+    }
+    
+    func coordinatorTransform() -> CoordinatorOutput {
+        let didTapHero = self.didTapHero
+        return CoordinatorOutput(
+            didTapHero: didTapHero
         )
     }
     

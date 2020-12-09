@@ -12,13 +12,13 @@ class HeroDetailViewControllerBuilder {
     private(set) var viewController: UIViewController?
     private(set) var viewModel: HeroDetailViewModel?
     
-    func build(output: HeroDetailViewModelOutput?, id: Int) -> HeroDetailViewControllerBuilder {
+    func build(id: Int) -> HeroDetailViewControllerBuilder {
         let storyboard = UIStoryboard(name: "HeroDetailViewController", bundle: Bundle(for: HeroDetailViewController.self))
         guard let navController = storyboard.instantiateViewController(identifier: "HeroDetailViewController") as? UINavigationController,
               let controller = navController.viewControllers.first as? HeroDetailViewController else {
             return self
         }
-        let viewModel = HeroDetailViewModel(output: output, id: id)
+        let viewModel = HeroDetailViewModel(id: id)
         controller.viewModel = viewModel
         self.navigationController = navController
         self.viewController = controller

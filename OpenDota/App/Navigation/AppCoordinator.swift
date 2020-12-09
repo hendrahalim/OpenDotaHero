@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import RxSwift
 
 enum AppViewController {
     case hero
@@ -23,27 +24,42 @@ class AppCoordinator {
     private func build(rootController: AppViewController) -> UINavigationController? {
         switch rootController {
         case .hero:
-            return HeroListViewControllerBuilder().build(output: self).navigationController
+            let builder = HeroListViewControllerBuilder().build()
+            if let viewModel = builder.viewModel {
+                let output = viewModel.coordinatorTransform()
+                self.setupHeroListCoordinatorOutput(output: output, disposeBag: viewModel.disposeBag)
+            }
+            return builder.navigationController
         }
+    }
+    
+    private func setupHeroListCoordinatorOutput(output: HeroListViewModel.CoordinatorOutput, disposeBag: DisposeBag?) {
+        guard let disposeBag = disposeBag else { return }
+        output.didTapHero
+            .bind { [weak self] (id) in
+                guard let id = id else { return }
+                self?.showHeroDetail(id: id)
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    private func setupHeroDetailOutput(output: HeroDetailViewModel.CoordinatorOutput, disposeBag: DisposeBag?){
+        guard let disposeBag = disposeBag else { return }
+        output.didTapOtherHero
+            .bind { [weak self] (id) in
+                guard let id = id else { return }
+                self?.showHeroDetail(id: id)
+            }
+            .disposed(by: disposeBag)
     }
     
     private func showHeroDetail(id: Int) {
-        if let heroDetailViewController = HeroDetailViewControllerBuilder().build(output: self, id: id).viewController as? HeroDetailViewController {
+        let builder = HeroDetailViewControllerBuilder().build(id: id)
+        if let heroDetailViewController = builder.viewController as? HeroDetailViewController,
+           let viewModel = builder.viewModel {
+            let output = viewModel.coordinatorTransform()
+            self.setupHeroDetailOutput(output: output, disposeBag: viewModel.disposeBag)
             self.navigationController?.pushViewController(heroDetailViewController, animated: true)
         }
     }
-}
-
-extension AppCoordinator: HeroListViewModelOutput {
-    func didTapHero(id: Int) {
-        self.showHeroDetail(id: id)
-    }
-}
-
-extension AppCoordinator: HeroDetailViewModelOutput {
-    func didTapOtherHero(id: Int) {
-        self.showHeroDetail(id: id)
-    }
-    
-    
 }

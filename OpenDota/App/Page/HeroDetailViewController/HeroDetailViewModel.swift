@@ -8,20 +8,23 @@
 import Foundation
 import RxSwift
 
-protocol HeroDetailViewModelOutput: AnyObject {
-    func didTapOtherHero(id: Int)
-}
 
 class HeroDetailViewModel {
     struct Input {
         let didTapOtherHero: Observable<Int?>
         let didTapRetry: Observable<Void>
     }
+    
     struct Output {
         let heroDetail: Observable<HeroDetail?>
         let otherHero: Observable<[OtherHeroInfo]>
         let viewState: Observable<ViewState>
     }
+    
+    struct CoordinatorOutput {
+        let didTapOtherHero: Observable<Int?>
+    }
+    
     struct HeroDetail {
         let heroName: String
         let attackType: AttackType?
@@ -56,6 +59,7 @@ class HeroDetailViewModel {
         }
 
     }
+    
     struct OtherHeroInfo {
         let id: Int
         let heroName: String
@@ -67,12 +71,12 @@ class HeroDetailViewModel {
             self.image = model.image
         }
     }
-    weak var output: HeroDetailViewModelOutput?
-    private let heroId: Int
-    private let disposeBag = DisposeBag()
     
-    init(output: HeroDetailViewModelOutput?, id: Int) {
-        self.output = output
+    private let heroId: Int
+    let disposeBag = DisposeBag()
+    private let didTapOtherHero = PublishSubject<Int?>()
+    
+    init(id: Int) {
         self.heroId = id
     }
     
@@ -87,7 +91,8 @@ class HeroDetailViewModel {
             .do { _ in
                 viewState.onNext(.loading)
             }
-            .flatMapLatest({ (_) -> Observable<HeroModel> in
+            .flatMapLatest({ [weak self] (_) -> Observable<HeroModel> in
+                guard let self = self else { return Observable.empty() }
                 return Datasource.shared.heroService.getHero(id: self.heroId)
                     .catchErrorJustReturn(nil)
                     .do { model in
@@ -131,9 +136,8 @@ class HeroDetailViewModel {
             }
         
         input.didTapOtherHero
-            .compactMap({ $0 })
             .bind { [weak self] (id) in
-                self?.output?.didTapOtherHero(id: id)
+                self?.didTapOtherHero.onNext(id)
             }
             .disposed(by: disposeBag)
         
@@ -147,6 +151,13 @@ class HeroDetailViewModel {
             heroDetail: heroDetail,
             otherHero: otherHero,
             viewState: viewState
+        )
+    }
+    
+    func coordinatorTransform() -> CoordinatorOutput {
+        let didTapOtherHero = self.didTapOtherHero
+        return CoordinatorOutput(
+            didTapOtherHero: didTapOtherHero
         )
     }
 }
