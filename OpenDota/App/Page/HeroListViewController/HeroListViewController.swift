@@ -67,29 +67,31 @@ class HeroListViewController: BaseViewController {
             .disposed(by: disposeBag)
         
         collectionView.rx.itemSelected
-            .bind { (indexPath) in
-                self.collectionView.deselectItem(at: indexPath, animated: true)
+            .bind { [weak self] (indexPath) in
+                self?.collectionView.deselectItem(at: indexPath, animated: true)
             }
             .disposed(by: disposeBag)
         
         collectionView.rx.modelSelected(HeroListViewModel.HeroSectionItemModel.self)
-            .bind { (model) in
-                self.didSelectModel.onNext(model.identity)
+            .bind { [weak self] (model) in
+                self?.didSelectModel.onNext(model.identity)
             }
             .disposed(by: disposeBag)
         
         segmentControlView.rx.controlEvent(.valueChanged)
-            .map({ self.segmentControlView.selectIndex })
-            .do { (_) in
-                self.collectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+            .map({ [weak self] in self?.segmentControlView.selectIndex })
+            .compactMap({ $0 })
+            .do { [weak self] (_) in
+                self?.collectionView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
             }
-            .bind { (index) in
-                self.didFilterRole.onNext(index)
+            .bind { [weak self] (index) in
+                self?.didFilterRole.onNext(index)
             }
             .disposed(by: disposeBag)
         
         output.viewState.asDriver(onErrorJustReturn: .ready)
-            .drive { (state) in
+            .drive { [weak self ](state) in
+                guard let self = self else { return }
                 switch state {
                 case .loading:
                     self.showLoading()
@@ -112,8 +114,8 @@ class HeroListViewController: BaseViewController {
             .map({ $0.map { (role) -> PinterestSegment.TitleElement in
                 return PinterestSegment.TitleElement(title: role)
             } })
-            .drive { (roles) in
-                self.segmentControlView.setRichTextTitles(roles)
+            .drive { [weak self] (roles) in
+                self?.segmentControlView.setRichTextTitles(roles)
             }
             .disposed(by: disposeBag)
     }

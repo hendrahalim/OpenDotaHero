@@ -43,7 +43,8 @@ class HeroDetailViewController: BaseViewController {
         let output = viewModel.transform(input: input)
         
         output.viewState.asDriver(onErrorJustReturn: .ready)
-            .drive { (state) in
+            .drive { [weak self] (state) in
+                guard let self = self else { return }
                 switch state {
                 case .loading:
                     self.showLoading()
@@ -60,13 +61,13 @@ class HeroDetailViewController: BaseViewController {
         
         output.heroDetail.asDriver(onErrorJustReturn: nil)
             .compactMap({ $0 })
-            .drive { (model) in
-                self.heroInfoView.configure(name: model.heroName, attackType: model.attackType, primaryAttribute: model.primaryAttribute, baseHealth: model.baseHealth, baseAttackMax: model.baseAttackMax, moveSpeed: model.moveSpeed, roles: model.roles, image: model.image)
+            .drive { [weak self] (model) in
+                self?.heroInfoView.configure(name: model.heroName, attackType: model.attackType, primaryAttribute: model.primaryAttribute, baseHealth: model.baseHealth, baseAttackMax: model.baseAttackMax, moveSpeed: model.moveSpeed, roles: model.roles, image: model.image)
             }
             .disposed(by: disposeBag)
         
         output.otherHero.asDriver(onErrorJustReturn: [])
-            .map({ (models) -> [OtherHeroView] in
+            .map({ [weak self] (models) -> [OtherHeroView] in
                 return models.map { (model) -> OtherHeroView in
                     let view = OtherHeroView()
                     view.output = self
@@ -74,7 +75,8 @@ class HeroDetailViewController: BaseViewController {
                     return view
                 }
             })
-            .drive { (views) in
+            .drive { [weak self] (views) in
+                guard let self = self else { return }
                 self.otherHeroStackView.addArrangedSubviews(views)
                 self.otherHeroStackView.layoutIfNeeded()
             }

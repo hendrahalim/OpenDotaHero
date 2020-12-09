@@ -9,8 +9,14 @@ import UIKit
 import KRProgressHUD
 
 class BaseViewController: UIViewController {
+    let uuid = UUID()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    deinit {
+        print("\(self.className()) \(uuid) is deinit")
     }
     
     func showLoading(message: String = "Loading...") {
