@@ -8,6 +8,7 @@ This is an app that shows list of DOTA heroes using [OpenDota API](https://docs.
 <img src="https://user-images.githubusercontent.com/9075060/101694019-1027f100-3aa5-11eb-9ee9-fbc66dabbb88.png" width="200" alt="Error View">
 </div>
 
+
 ## Realm Object
 ```
 id: Int <PK>
