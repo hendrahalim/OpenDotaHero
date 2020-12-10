@@ -93,7 +93,7 @@ class HeroListViewModel {
             .do { _ in
                 viewState.onNext(.loading)
             }
-            .subscribeOn(ConcurrentDispatchQueueScheduler(queue: DispatchQueue.global(qos: .background)))
+            .subscribeOn(ConcurrentDispatchQueueScheduler(queue: DispatchQueue.global(qos: .userInteractive)))
             .flatMapLatest({ (_) -> Observable<[Int: HeroModel]> in
                 return Datasource.shared.heroService.getAllHero()
                     .catchError { (error) -> Observable<[HeroModel]> in

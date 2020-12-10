@@ -87,7 +87,7 @@ class HeroDetailViewModel {
         
         let otherHeroModel = shouldReloadData
             .startWith(())
-            .subscribeOn(ConcurrentDispatchQueueScheduler(queue: DispatchQueue.global(qos: .background)))
+            .subscribeOn(ConcurrentDispatchQueueScheduler(queue: DispatchQueue.global(qos: .userInteractive)))
             .do { _ in
                 viewState.onNext(.loading)
             }
