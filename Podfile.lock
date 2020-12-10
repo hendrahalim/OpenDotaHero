@@ -20,6 +20,8 @@ PODS:
   - Realm/Headers (5.3.4)
   - RealmSwift (5.3.4):
     - Realm (= 5.3.4)
+  - RxBlocking (5.1.1):
+    - RxSwift (~> 5)
   - RxCocoa (5.1.1):
     - RxRelay (~> 5)
     - RxSwift (~> 5)
@@ -63,6 +65,7 @@ DEPENDENCIES:
   - Moya/RxSwift
   - PinterestSegment
   - RealmSwift
+  - RxBlocking
   - RxCocoa
   - RxDataSources
   - RxSwift
@@ -79,6 +82,7 @@ SPEC REPOS:
     - PinterestSegment
     - Realm
     - RealmSwift
+    - RxBlocking
     - RxCocoa
     - RxDataSources
     - RxRelay
@@ -95,12 +99,13 @@ SPEC CHECKSUMS:
   PinterestSegment: 3dd673ffd9feb00dc7816bb1e503d70459e8eaa8
   Realm: 4dd457b6ed025041cf7efe05dae78c027ba842e0
   RealmSwift: 233af88fffe05ed7f9305eecef100d477c0c2c42
+  RxBlocking: 5f700a78cad61ce253ebd37c9a39b5ccc76477b4
   RxCocoa: 32065309a38d29b5b0db858819b5bf9ef038b601
   RxDataSources: efee07fa4de48477eca0a4611e6d11e2da9c1114
   RxRelay: d77f7d771495f43c556cbc43eebd1bb54d01e8e9
   RxSwift: 81470a2074fa8780320ea5fe4102807cb7118178
   SwifterSwift: 334181863c416882d97b7a60c05054d9e4d799e2
 
-PODFILE CHECKSUM: 5f3ed574a1a5e3198258dac415862b78462222d0
+PODFILE CHECKSUM: 47aa3ac2f61dcb3fe57bff1fea7092299a1bf10e
 
 COCOAPODS: 1.10.0

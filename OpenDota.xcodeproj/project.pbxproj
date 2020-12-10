@@ -46,6 +46,8 @@
 		D84D90C8257B8B20007C00DC /* HeroListItemCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D84D90C6257B8B20007C00DC /* HeroListItemCollectionViewCell.xib */; };
 		D84DCC57257E4D06006EDEA4 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84DCC56257E4D05006EDEA4 /* UIColorExtension.swift */; };
 		D84DCC5D257E52FB006EDEA4 /* RoundedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D84DCC5C257E52FB006EDEA4 /* RoundedView.swift */; };
+		D852902F2582368A0054DCF6 /* GetAllHeroStats.json in Resources */ = {isa = PBXBuildFile; fileRef = D852902E2582368A0054DCF6 /* GetAllHeroStats.json */; };
+		D866F577258227B100DC6B1D /* HeroServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D866F576258227B100DC6B1D /* HeroServiceTests.swift */; };
 		D883950F257F7ACC00E9905A /* GeneralErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D883950E257F7ACC00E9905A /* GeneralErrorView.swift */; };
 		D8839517257F7AE200E9905A /* GeneralErrorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D8839516257F7AE200E9905A /* GeneralErrorView.xib */; };
 		D88EE712257EA6D8009A0221 /* ViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D88EE711257EA6D8009A0221 /* ViewState.swift */; };
@@ -129,6 +131,8 @@
 		D84D90C6257B8B20007C00DC /* HeroListItemCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HeroListItemCollectionViewCell.xib; sourceTree = "<group>"; };
 		D84DCC56257E4D05006EDEA4 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		D84DCC5C257E52FB006EDEA4 /* RoundedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedView.swift; sourceTree = "<group>"; };
+		D852902E2582368A0054DCF6 /* GetAllHeroStats.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = GetAllHeroStats.json; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.json; };
+		D866F576258227B100DC6B1D /* HeroServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeroServiceTests.swift; sourceTree = "<group>"; };
 		D883950E257F7ACC00E9905A /* GeneralErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralErrorView.swift; sourceTree = "<group>"; };
 		D8839516257F7AE200E9905A /* GeneralErrorView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GeneralErrorView.xib; sourceTree = "<group>"; };
 		D88EE711257EA6D8009A0221 /* ViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewState.swift; sourceTree = "<group>"; };
@@ -235,6 +239,8 @@
 			children = (
 				D80A442D257A89410062E6DC /* OpenDotaTests.swift */,
 				D80A442F257A89410062E6DC /* Info.plist */,
+				D866F576258227B100DC6B1D /* HeroServiceTests.swift */,
+				D852902E2582368A0054DCF6 /* GetAllHeroStats.json */,
 			);
 			path = OpenDotaTests;
 			sourceTree = "<group>";
@@ -569,6 +575,7 @@
 				D80A4425257A89410062E6DC /* Sources */,
 				D80A4426257A89410062E6DC /* Frameworks */,
 				D80A4427257A89410062E6DC /* Resources */,
+				D47B6F279B3B8249F0CC13E5 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -663,6 +670,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D852902F2582368A0054DCF6 /* GetAllHeroStats.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -730,6 +738,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OpenDota-OpenDotaUITests/Pods-OpenDota-OpenDotaUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D47B6F279B3B8249F0CC13E5 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OpenDotaTests/Pods-OpenDotaTests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-OpenDotaTests/Pods-OpenDotaTests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-OpenDotaTests/Pods-OpenDotaTests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E31EF13282DC55E17E47C72A /* [CP] Check Pods Manifest.lock */ = {
@@ -829,6 +854,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D80A442E257A89410062E6DC /* OpenDotaTests.swift in Sources */,
+				D866F577258227B100DC6B1D /* HeroServiceTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

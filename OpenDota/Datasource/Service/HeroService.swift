@@ -30,7 +30,7 @@ class HeroService: HeroServiceProtocol {
     }
     
     private func setupRx() {
-        syncHeroCache.flatMap({ self.heroAccessor.getAllHeroStat() })
+        syncHeroCache.flatMap({ self.getAllHeroFromNetwork() })
             .subscribe { [weak self] (models) in
                 self?.shouldUpdateHeroCache.onNext(models)
             } onError: { [weak self] (error) in
@@ -89,6 +89,9 @@ class HeroService: HeroServiceProtocol {
     private func getAllHero(sync syncLocal: Bool) -> Observable<[HeroModel]> {
         let cache = self.heroCache?.getAllHeroStat() ?? Observable<[HeroModel]>.just([])
         return cache
+            .map({ (models) -> [HeroModel] in
+                return models.sorted(by: { $0.id < $1.id })
+            })
             .flatMap { [weak self] (cacheHero) -> Observable<[HeroModel]> in
                 guard let self = self else { return Observable.just([]) }
                 if cacheHero.count > 0 {
@@ -102,11 +105,18 @@ class HeroService: HeroServiceProtocol {
                 } else {
                     self.logger?.info(message: "Get Hero cache from network")
                     return
-                        self.heroAccessor.getAllHeroStat()
+                        self.getAllHeroFromNetwork()
                         .do { (models) in
                             self.shouldUpdateHeroCache.onNext(models)
                         }
                 }
+            }
+    }
+    
+    private func getAllHeroFromNetwork() -> Observable<[HeroModel]> {
+        return self.heroAccessor.getAllHeroStat()
+            .map { (models) -> [HeroModel] in
+                return models.sorted(by: { $0.id < $1.id })
             }
     }
 }

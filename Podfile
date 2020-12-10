@@ -20,6 +20,7 @@ target 'OpenDota' do
   target 'OpenDotaTests' do
     inherit! :search_paths
     # Pods for testing
+    pod 'RxBlocking'
   end
 
   target 'OpenDotaUITests' do
