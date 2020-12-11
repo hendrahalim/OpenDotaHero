@@ -47,10 +47,23 @@ class HeroService: HeroServiceProtocol {
     }
     
     func getHero(id: Int) -> Observable<HeroModel?> {
-        return self.getAllHero(sync: false)
-            .map({ (models) -> HeroModel? in
-                return models.first(where: { $0.id == id })
-            })
+        return self.getHero(id: id, sync: false)
+    }
+    
+    private func getHero(id: Int, sync: Bool) -> Observable<HeroModel?> {
+        let cache = self.heroCache?.getHero(id: id) ?? Observable<HeroModel?>.just(nil)
+        return cache
+            .flatMap { [weak self] (model) -> Observable<HeroModel?> in
+                guard let self = self else { return Observable.empty() }
+                if let model = model {
+                    return Observable.just(model)
+                } else {
+                    return self.getAllHero(sync: sync)
+                        .map({ (models) -> HeroModel? in
+                            return models.first(where: { $0.id == id })
+                        })
+                }
+            }
     }
     
     func getOtherHero(id: Int, attribute: PrimaryAttribute, roles: [String], resultCount numberOfHero: Int) -> Observable<[HeroModel]> {

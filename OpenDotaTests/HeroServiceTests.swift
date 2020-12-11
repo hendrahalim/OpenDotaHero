@@ -10,15 +10,8 @@ import RxSwift
 import RxBlocking
 @testable import OpenDota
 
-fileprivate protocol HeroServiceTestableProtocol: HeroServiceProtocol {
-    var shouldUpdateHeroCache: Observable<[HeroModel]> { get }
-}
 
 fileprivate class HeroAccessorMock: HeroAccessorProtocol {
-    var shouldUpdateHeroCache: Observable<[HeroModel]> {
-        return PublishSubject<[HeroModel]>()
-    }
-    
     func getAllHeroStat() -> Observable<[HeroModel]> {
         let decoder = JSONDecoder()
         guard let url = Bundle(for: HeroAccessorMock.self).url(forResource: "GetAllHeroStats", withExtension: "json"),
@@ -33,6 +26,18 @@ fileprivate class HeroAccessorMock: HeroAccessorProtocol {
 }
 
 fileprivate class HeroCacheMock: HeroCacheProtocol {
+    func getHero(id: Int) -> Observable<HeroModel?> {
+        let decoder = JSONDecoder()
+        guard let url = Bundle(for: HeroAccessorMock.self).url(forResource: "GetAllHeroStats", withExtension: "json"),
+              let data = try? Data(contentsOf: url),
+              let result = try? decoder.decode([HeroModel].self, from: data).first(where: { $0.id == id })
+            else {
+                return Observable.empty()
+            }
+        
+        return Observable.just(result)
+    }
+    
     func getAllHeroStat() -> Observable<[HeroModel]> {
         let decoder = JSONDecoder()
         guard let url = Bundle(for: HeroAccessorMock.self).url(forResource: "GetAllHeroStats", withExtension: "json"),
@@ -50,15 +55,9 @@ fileprivate class HeroCacheMock: HeroCacheProtocol {
     }
 }
 
-extension HeroService: HeroServiceTestableProtocol {
-    var shouldUpdateHeroCache: Observable<[HeroModel]> {
-        return PublishSubject<[HeroModel]>()
-    }
-}
-
 class HeroServiceTests: XCTestCase {
     
-    private var heroService: HeroServiceTestableProtocol!
+    private var heroService: HeroServiceProtocol!
     private var heroCache: HeroCacheProtocol!
     private var disposeBag: DisposeBag!
 

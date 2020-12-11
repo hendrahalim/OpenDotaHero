@@ -11,6 +11,7 @@ import RxSwift
 
 protocol HeroCacheProtocol: HeroAccessorProtocol {
     func save(_ values: [HeroModel])
+    func getHero(id: Int) -> Observable<HeroModel?>
 }
 
 class HeroCache: HeroCacheProtocol {
@@ -20,6 +21,14 @@ class HeroCache: HeroCacheProtocol {
     init(realm: RealmServiceProtocol, logger: LoggerProtocol?) {
         self.realmService = realm
         self.logger = logger
+    }
+    
+    func getHero(id: Int) -> Observable<HeroModel?> {
+        guard let realmInstance = self.realmService.instance,
+              let result = realmInstance.object(ofType: HeroRealmObject.self, forPrimaryKey: id)?.toModel()
+        else { return Observable.just(nil) }
+        
+        return Observable.just(result)
     }
     
     func getAllHeroStat() -> Observable<[HeroModel]> {
